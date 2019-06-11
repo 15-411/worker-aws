@@ -22,7 +22,7 @@
       "owners": ["099720109477"],
       "most_recent": true
     },
-    "instance_type": "t2.large",
+    "instance_type": "t2.2xlarge",
     "ssh_username": "ubuntu",
     "ami_description": "AMI automatically built from packer-worker repository.",
     "ami_name": "{{user `ami_name`}}"
