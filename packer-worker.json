@@ -6,7 +6,7 @@
     "docker_username": "{{env `DOCKER_USERNAME`}}",
     "docker_password": "{{env `DOCKER_PASSWORD`}}",
     "github_key_source": "cmu-15-411-bot-key",
-    "github_key_destination": "/usr/ubuntu/github_key.pem"
+    "github_key_destination": "/home/ubuntu/github_key.pem"
   },
   "builders": [{
     "type": "amazon-ebs",
