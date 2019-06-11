@@ -1,5 +1,5 @@
 install:
-- curl -L -o https://releases.hashicorp.com/packer/1.4.1/packer_1.4.1_linux_amd64.zip
+- curl -L -o packer.zip https://releases.hashicorp.com/packer/1.4.1/packer_1.4.1_linux_amd64.zip
 - unzip -d packer packer.zip
 script:
 - PATH=$(pwd)/packer:$PATH packer build packer-worker.json
