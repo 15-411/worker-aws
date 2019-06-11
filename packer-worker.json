@@ -1,12 +1,17 @@
 {
   "variables": {
     "ami_name": "15411_worker_{{timestamp}}.img",
-    "github_pem": "/usr/ubuntu/github_key.pem"
+    "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
+    "docker_username": "{{env `DOCKER_USERNAME`}}",
+    "docker_password": "{{env `DOCKER_PASSWORD`}}",
+    "github_key_source": "cmu-15-411-bot-key",
+    "github_key_destination": "/usr/ubuntu/github_key.pem"
   },
   "builders": [{
     "type": "amazon-ebs",
-    "access_key": "{{env `AWS_ACCESS_KEY`}}",
-    "secret_key": "{{env `AWS_SECRET_KEY`}}",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
     "region": "us-east-1",
     "source_ami_filter": {
       "filters": {
@@ -25,16 +30,16 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "cmu-15-411-bot-key",
-      "destination": "{{user `github_pem`}}"
+      "source": "{{user `github_key_source`}}",
+      "destination": "{{user `github_key_destination`}}"
     },
     {
       "type": "shell",
       "script": "./setup.sh",
       "environment_vars": [
-        "GITHUB_PEM": "{{user `github_pem`}}",
-        "DOCKER_USERNAME": "{{env `DOCKER_USERNAME`}}",
-        "DOCKER_PASSWORD": "{{env `DOCKER_PASSWORD`}}"
+        "GITHUB_PEM={{user `github_pem`}}",
+        "DOCKER_USERNAME={{user `docker_username`}}",
+        "DOCKER_PASSWORD={{user `docker_password`}}"
       ]
     }
   ]
