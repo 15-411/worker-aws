@@ -22,10 +22,18 @@
       "owners": ["099720109477"],
       "most_recent": true
     },
-    "instance_type": "t2.2xlarge",
+    "instance_type": "t2.large",
     "ssh_username": "ubuntu",
     "ami_description": "AMI automatically built from packer-worker repository.",
-    "ami_name": "{{user `ami_name`}}"
+    "ami_name": "{{user `ami_name`}}",
+    "launch_block_device_mappings": [
+      {
+        "device_name": "/dev/sda1",
+        "volume_size": 20,
+        "volume_type": "gp2",
+        "delete_on_termination": true
+      }
+    ]
   }],
   "provisioners": [
     {
