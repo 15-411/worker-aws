@@ -37,7 +37,7 @@
       "type": "shell",
       "script": "./setup.sh",
       "environment_vars": [
-        "GITHUB_PEM={{user `github_pem`}}",
+        "GITHUB_PEM={{user `github_key_destination`}}",
         "DOCKER_USERNAME={{user `docker_username`}}",
         "DOCKER_PASSWORD={{user `docker_password`}}"
       ]

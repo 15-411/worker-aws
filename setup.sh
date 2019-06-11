@@ -21,25 +21,11 @@ if [ -z "$DOCKER_USERNAME" ]; then
   exit 1
 fi
 
-logit 'Installing basic packages...'
-sudo apt-get update
-sudo apt-get -y install \
-  emacs \
+logit 'Installing necessary software...'
+sudo apt-get install \
   gcc \
-  g++ \
-  git \
   make \
-  vim \
   ;
-
-logit 'Installing Docker...'
-curl -sSL https://get.docker.com/ | sudo sh
-# Give autograde user the ability to use and manage docker.
-sudo groupadd docker
-sudo usermod -aG docker autograde
-# Authenticate with secret credentials.
-sudo docker login --password "$DOCKER_PASSWORD" --username "$DOCKER_USERNAME"
-sudo docker pull cmu411/autograder:latest
 
 logit 'Creating users...'
 sudo useradd -c 'Autograder account' -U -m -s /bin/bash autograde
@@ -47,6 +33,14 @@ sudo usermod -a -G autograde ubuntu
 # reload groups; see https://superuser.com/a/345051
 newgrp autograde
 newgrp ubuntu
+
+logit 'Installing Docker...'
+curl -sSL https://get.docker.com/ | sudo sh
+# Give autograde user the ability to use and manage docker.
+sudo usermod -aG docker autograde
+# Authenticate with secret credentials.
+sudo docker login --password "$DOCKER_PASSWORD" --username "$DOCKER_USERNAME"
+sudo docker pull cmu411/autograder:latest
 
 logit 'Trusting GitHub ssh keys...'
 ssh-keyscan github.com |
