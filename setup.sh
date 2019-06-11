@@ -55,6 +55,7 @@ ssh-keyscan github.com |
   sudo tee -a ~ubuntu/.ssh/known_hosts
 
 logit 'Cloning Tango and installing autodriver...'
+chmod 400 "$GITHUB_PEM"
 ssh-agent bash -c "ssh-add $GITHUB_PEM ; git clone git@github.com:$tango_repo.git Tango"
 make -C Tango/autodriver
 sudo make -C Tango/autodriver install
