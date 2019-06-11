@@ -1,6 +1,5 @@
 #!/bin/bash -e
 
-github_pem="/home/ubuntu/github_key.pem"
 tango_repo="CMU-15-411-F18/Tango"
 
 logit () {
@@ -10,13 +9,6 @@ logit () {
 logit 'Script starting.'
 
 logit 'Validating environment...'
-if [ -z "$GITHUB_KEY" ]; then
-  echo "./setup.sh: Expected GitHub key in the GITHUB_KEY environment variable."
-  echo "./setup.sh: Found empty string."
-  echo "./setup.sh: Exiting..."
-  exit 1
-fi
-
 if [ -z "$DOCKER_PASSWORD" ]; then
   echo "./setup.sh: Empty docker password."
   echo "./setup.sh: Exiting..."
@@ -27,14 +19,6 @@ if [ -z "$DOCKER_USERNAME" ]; then
   echo "./setup.sh: Empty docker username."
   echo "./setup.sh: Exiting..."
   exit 1
-fi
-
-logit 'Saving GitHub key to a file....'
-echo "$GITHUB_KEY" > "$github_pem"
-if [ ! -f "$github_pem" ]; then
-   echo "./setup.sh: Github pem file '$github_pem' not successfully created."
-   echo "./setup.sh: Exiting..."
-   exit 1
 fi
 
 logit 'Installing basic packages...'
@@ -70,7 +54,7 @@ ssh-keyscan github.com |
   sudo tee -a ~ubuntu/.ssh/known_hosts
 
 logit 'Cloning Tango and installing autodriver...'
-ssh-agent bash -c "ssh-add $github_pem ; git clone git@github.com:$tango_repo.git Tango"
+ssh-agent bash -c "ssh-add $GITHUB_PEM ; git clone git@github.com:$tango_repo.git Tango"
 make -C Tango/autodriver
 sudo make -C Tango/autodriver install
 rm -rf Tango

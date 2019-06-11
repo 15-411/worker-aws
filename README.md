@@ -8,7 +8,7 @@ The `packer-worker.json` file contains the configuration for the AMI, including 
 
 Continuous deployment is set up for this repository on TravisCI. If you have been added to the GitHub organization and you navigate to <https://travis-ci.com>, you will see the build history for this repository. TravisCI initiates a build for this image each time you commit and push this repository to GitHub.
 
-TravisCI needs to access our `AWS_ACCESS_KEY`, our `AWS_SECRET_KEY`, our `GITHUB_KEY`, our `DOCKER_USERNAME`, and our `DOCKER_PASSWORD`. To do this, we use [encryption](https://docs.travis-ci.com/user/encryption-keys/). In particular, you can run `travis encrypt AWS_ACCESS_KEY=... AWS_SECRET_KEY=... GITHUB_KEY=... DOCKER_USERNAME=... DOCKER_PASSWORD=... --add` (with the ellipses replaced by the value correponding to that key) to add the encrypted secret keys to the .travis.yml file.
+TravisCI needs to access our `AWS_ACCESS_KEY`, our `AWS_SECRET_KEY`, a private GitHub key for the user `cmu-15-411-bot`, our `DOCKER_USERNAME`, and our `DOCKER_PASSWORD`. To do this, we use [encryption](https://docs.travis-ci.com/user/encryption-keys/). Currently, these values are stored in the `.travis.yml` file. Travis CI generates a key-pair for each repository, so if you change this repository's name or want to change the stored credentials, you will have to run some commands. In particular, you can run `travis encrypt AWS_ACCESS_KEY=... AWS_SECRET_KEY=... DOCKER_USERNAME=... DOCKER_PASSWORD=... --add` (with the ellipses replaced by the value correponding to that key) to add the encrypted secret keys to the .travis.yml file. (The GitHub key, in contrast, is stored in the encrypted `.enc` file and decrypted in the `.travis.yml` file. To encrypt a different key, use `travis encrypt-file FILENAME --add`.)
 
 To initiate an empty build (say, if you just updated the Docker image and you want to build a new AMI that has the latest version of the Docker image downloaded), you can make an empty commit with `git commit --allow-empty -m 'Trigger build of AMI with latest Docker image.'`.
 
@@ -18,9 +18,8 @@ Manually building the AMI can be done with the following command:
 ```
 AWS_ACCESS_KEY=... \
   AWS_SECRET_KEY=... \
-  GITHUB_KEY=... \
   DOCKER_USERNAME=... \
   DOCKER_PASSWORD=... \
   packer build packer-worker.json
 ```
-You should replace the ellipses `...` in each case with the appropriate secret values. Note that this command will actually create the image in the AWS organization.
+You should replace the ellipses `...` in each case with the appropriate secret values. Note that this command will actually create the image in the AWS organization. You will also have to have a decrypted SSH key for the `cmu-15-411-bot` GitHub user in the file `cmu-15-411-bot-key`.

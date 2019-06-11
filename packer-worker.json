@@ -1,6 +1,7 @@
 {
   "variables": {
-    "ami_name": "15411_worker_{{timestamp}}.img"
+    "ami_name": "15411_worker_{{timestamp}}.img",
+    "github_pem": "/usr/ubuntu/github_key.pem"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -23,10 +24,15 @@
   }],
   "provisioners": [
     {
+      "type": "file",
+      "source": "cmu-15-411-bot-key",
+      "destination": "{{user `github_pem`}}"
+    },
+    {
       "type": "shell",
       "script": "./setup.sh",
       "environment_vars": [
-        "GITHUB_KEY": "{{env `GITHUB_KEY`}}",
+        "GITHUB_PEM": "{{user `github_pem`}}",
         "DOCKER_USERNAME": "{{env `DOCKER_USERNAME`}}",
         "DOCKER_PASSWORD": "{{env `DOCKER_PASSWORD`}}"
       ]
