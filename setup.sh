@@ -22,6 +22,7 @@ if [ -z "$DOCKER_USERNAME" ]; then
 fi
 
 logit 'Installing necessary software...'
+sudo apt-get update
 sudo apt-get install -y \
   gcc \
   make \
