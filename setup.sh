@@ -8,6 +8,12 @@ logit () {
 }
 logit 'Script starting.'
 
+sleep_time=120
+if [ ! -z "$sleep_time" ]; then
+  logit "Sleeping for $sleep_time seconds to allow for sufficient setup for Ubuntu..."
+  sleep $sleep_time
+fi
+
 logit 'Validating environment...'
 if [ -z "$DOCKER_PASSWORD" ]; then
   echo "./setup.sh: Empty docker password."
