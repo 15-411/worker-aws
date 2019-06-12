@@ -24,7 +24,7 @@
     },
     "instance_type": "t2.large",
     "ssh_username": "ubuntu",
-    "ami_description": "AMI automatically built from packer-worker repository.",
+    "ami_description": "AMI automatically built from worker-aws repository.",
     "ami_name": "{{user `ami_name`}}",
     "launch_block_device_mappings": [
       {
