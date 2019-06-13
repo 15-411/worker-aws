@@ -1,6 +1,6 @@
 {
   "variables": {
-    "ami_name": "15411_worker_{{timestamp}}.img",
+    "ami_name": "15411_worker_{{isotime \"2006-01-02_15-04-05\"}}.img",
     "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
     "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
     "docker_username": "{{env `DOCKER_USERNAME`}}",
@@ -26,6 +26,9 @@
     "ssh_username": "ubuntu",
     "ami_description": "AMI automatically built from worker-aws repository.",
     "ami_name": "{{user `ami_name`}}",
+    "tags": {
+      "Name": "{{user `ami_name`}}"
+    },
     "launch_block_device_mappings": [
       {
         "device_name": "/dev/sda1",
