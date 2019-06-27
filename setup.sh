@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-tango_repo="CMU-15-411-F18/Tango"
+tango_repo="15-411/Tango"
 
 logit () {
    echo "***SUMMARY*** $1"
