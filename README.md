@@ -10,9 +10,9 @@ Continuous deployment is set up for this repository on TravisCI. If you have bee
 
 TravisCI needs to access our `AWS_ACCESS_KEY`, our `AWS_SECRET_KEY`, a private GitHub key for the user `cmu-15-411-bot`, our `DOCKER_USERNAME`, and our `DOCKER_PASSWORD`. To do this, we use [encryption](https://docs.travis-ci.com/user/encryption-keys/). Currently, these values are stored in the `.travis.yml` file. Travis CI generates a key-pair for each repository, so if you change this repository's name or want to change the stored credentials, you will have to run some commands. In particular, you can run `travis encrypt AWS_ACCESS_KEY=... AWS_SECRET_KEY=... DOCKER_USERNAME=... DOCKER_PASSWORD=... --add` (with the ellipses replaced by the value correponding to that key) to add the encrypted secret keys to the .travis.yml file. (The GitHub key, in contrast, is stored in the encrypted `.enc` file and decrypted in the `.travis.yml` file. To encrypt a different key, use `travis encrypt-file FILENAME --add`.)
 
-To initiate an empty build (say, if you just updated the Docker image and you want to build a new AMI that has the latest version of the Docker image downloaded), you can make an empty commit with `git commit --allow-empty -m 'Trigger build of AMI with latest Docker image.'`.
-
 The worker will be named in the format "15411\_worker\_TIMESTAMP.img", where TIMESTAMP is replaced with a TIMESTAMP of when the repo was built.
+
+The `worker-docker` repository, when pushed, will trigger a build on DockerHub for the `cmu411/autograder` repository. When this build completes, DockerHub sends a POST request (as specified by the webhook for the autograder repository) to the Heroku app for the `docker-to-aws-cd` repository. This webapp initiates a build for THIS repository, `worker-aws`. This will mean that the latest Docker image will be cached on the latest version of the image built from this repository; this avoids re-pulling the latest Docker image when a new worker instance starts up.
 
 Manually building the AMI can be done with the following command:
 ```
