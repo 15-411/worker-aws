@@ -11,7 +11,7 @@ logit 'Script starting.'
 sleep_time=120
 if [ ! -z "$sleep_time" ]; then
   logit "Sleeping for $sleep_time seconds to allow for sufficient setup for Ubuntu..."
-  sleep $sleep_time
+  sleep "$sleep_time"
 fi
 
 logit 'Validating environment...'
@@ -23,6 +23,12 @@ fi
 
 if [ -z "$DOCKER_USERNAME" ]; then
   echo "./setup.sh: Empty docker username."
+  echo "./setup.sh: Exiting..."
+  exit 1
+fi
+
+if [ -z "$GITHUB_PEM" ]; then
+  echo "./setup.sh: Empty GITHUB_PEM environment variable."
   echo "./setup.sh: Exiting..."
   exit 1
 fi
@@ -54,7 +60,7 @@ sudo docker pull cmu411/autograder:latest
 logit 'Trusting GitHub ssh keys...'
 ssh-keyscan github.com |
   sudo tee -a /root/.ssh/known_hosts |
-  sudo tee -a ~ubuntu/.ssh/known_hosts
+  tee -a ~ubuntu/.ssh/known_hosts
 
 logit 'Cloning Tango and installing autodriver...'
 chmod 400 "$GITHUB_PEM"
