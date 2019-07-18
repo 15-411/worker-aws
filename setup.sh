@@ -1,6 +1,8 @@
 #!/bin/bash -e
 
 tango_repo="15-411/Tango"
+static_analysis_repo="15-411/static-analysis"
+container="building_static_analysis"
 
 logit () {
    echo "***SUMMARY*** $1"
@@ -68,5 +70,21 @@ ssh-agent bash -c "ssh-add $GITHUB_PEM ; git clone git@github.com:$tango_repo.gi
 make -C Tango/autodriver
 sudo make -C Tango/autodriver install
 rm -rf Tango
+
+logit 'Building static analysis tools on Docker...'
+ssh-agent bash -c "ssh-add $GITHUB_PEM; git clone -q git@github.com:$static_analysis_repo.git static-analysis"
+rm -rf static-analysis/.git
+
+sudo docker run --name "$container" -td cmu411/autograder:latest
+sudo docker cp static-analysis "$container:/autograder/static-analysis"
+rm -rf static-analysis
+
+# Make the static analysis binaries on the Docker container.
+# (The PS1 nonsense is for reasons that follow:
+# The .bashrc checks if PS1 is set to something before allowing us
+# to source. We are fooling the .bashrc into thinking we're an
+# interactive shell. We need stuff in the bashrc.)
+sudo docker exec "$container" bash -c "PS1=a ; source ~/.bashrc ; make -C static-analysis"
+sudo docker cp "$container:/autograder/static-analysis" static-analysis
 
 logit 'Done'
