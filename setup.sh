@@ -86,5 +86,7 @@ rm -rf static-analysis
 # interactive shell. We need stuff in the bashrc.)
 sudo docker exec "$container" bash -c "PS1=a ; source ~/.bashrc ; make -C static-analysis"
 sudo docker cp "$container:/autograder/static-analysis" static-analysis
+sudo docker stop "$container"
+sudo docker rm "$container"
 
 logit 'Done'
