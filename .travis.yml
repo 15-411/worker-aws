@@ -1,5 +1,5 @@
 script:
-- travis_wait 40 packer build packer-worker.json
+- ./travis_wait 60 packer build packer-worker.json
 before_install:
 - openssl aes-256-cbc -K $encrypted_fdcf74321dd2_key -iv $encrypted_fdcf74321dd2_iv
   -in cmu-15-411-bot-key.enc -out cmu-15-411-bot-key -d

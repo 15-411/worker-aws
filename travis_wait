@@ -1,0 +1,21 @@
+#!/bin/bash
+limit=${1:?Need time}
+shift
+
+# Send long-living command to background
+"$@" &
+pid=$!
+
+minutes=0
+
+# Check for existence of process with kill -0
+while kill -0 "$pid" >/dev/null 2>&1; do
+  echo -n -e " \b" # Produce some output
+
+  if [ "$minutes" -eq "$limit" ]; then
+    break;
+  fi
+
+  minutes=$((minutes+1))
+  sleep 60
+done
