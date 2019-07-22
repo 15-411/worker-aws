@@ -19,3 +19,7 @@ while kill -0 "$pid" >/dev/null 2>&1; do
   minutes=$((minutes+1))
   sleep 60
 done
+
+# Get the exit status of this process to be the same
+# as the background process.
+wait "$pid"
