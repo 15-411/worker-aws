@@ -57,7 +57,11 @@ curl -sSL https://get.docker.com/ | sudo sh
 sudo usermod -aG docker autograde
 # Authenticate with secret credentials.
 sudo docker login --password "$DOCKER_PASSWORD" --username "$DOCKER_USERNAME"
-sudo docker pull cmu411/autograder:latest
+
+# Cache all necessary images
+for l in ocaml haskell sml rust; do
+  sudo docker pull "cmu411/autograder-$l:latest"
+done
 
 logit 'Trusting GitHub ssh keys...'
 ssh-keyscan github.com |
@@ -75,7 +79,7 @@ logit 'Building static analysis tools on Docker...'
 ssh-agent bash -c "ssh-add $GITHUB_PEM; git clone -q git@github.com:$static_analysis_repo.git static-analysis"
 rm -rf static-analysis/.git
 
-sudo docker run --name "$container" -td cmu411/autograder:latest
+sudo docker run --name "$container" -td cmu411/autograder-ocaml:latest
 sudo docker cp static-analysis "$container:/autograder/static-analysis"
 rm -rf static-analysis
 
