@@ -59,7 +59,7 @@ sudo usermod -aG docker autograde
 sudo docker login --password "$DOCKER_PASSWORD" --username "$DOCKER_USERNAME"
 
 # Cache all necessary images
-for l in ocaml haskell sml rust; do
+for l in ocaml haskell sml rust other; do
   sudo docker pull "cmu411/autograder-$l:latest"
 done
 
